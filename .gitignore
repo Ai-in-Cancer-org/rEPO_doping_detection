@@ -1,0 +1,33 @@
+# Data and outputs — never commit
+data/
+outputs/
+*.pth
+*.pt
+*.h5
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+
+# MLflow
+mlruns/
+
+# SLURM logs
+logs/
+*.log
+*.out
+*.err
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp

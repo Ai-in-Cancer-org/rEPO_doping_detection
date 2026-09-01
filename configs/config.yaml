@@ -1,0 +1,55 @@
+# ── rEPO Detection Pipeline — Configuration ───────────────────────────────────
+# Edit paths and parameters here. All scripts accept --config to load this file.
+# No paths or parameters are hardcoded in any script.
+
+data:
+  slides_dir:       "data/slides"
+  qc_dir:           "data/haemorasis_output/_quality_control"
+  tiles_dir:        "data/tiles"
+  masks_dir:        "data/masks"
+  overlays_dir:     "data/overlays"
+  metadata_dir:     "data/metadata"
+  label_csv:        "configs/slide_labels.csv"  # user-provided: slide_id, label
+
+outputs:
+  models_dir:       "outputs/models"
+  mlflow_dir:       "outputs/mlflow"
+  results_dir:      "outputs/results"
+  figures_dir:      "outputs/figures"
+  noise_dir:        "outputs/noise"
+
+tile_extraction:
+  tile_size:        1500       # extracted tile size in pixels (OpenSlide)
+  prob_threshold:   1.0        # QC monolayer probability threshold
+  qc_tile_size:     512        # Haemorasis QC tile size (do not change)
+
+preprocessing:
+  n_folds:          5
+  test_fold:        4          # held-out test fold index
+  seed:             42
+
+training:
+  model:            "resnet34"   # resnet34 / resnet50 / efficientnet_b2
+  epochs:           50
+  batch_size:       8
+  input_size:       [512, 512]
+  lr:               0.003
+  momentum:         0.9
+  weight_decay:     1.0e-4
+  lr_schedule:      "cosine"      # cosine | step
+  crop_scale:       [0.5, 1.0]    # foreground-aware random resized crop
+  crop_ratio:       [0.75, 1.33]
+  min_foreground:   0.05          # minimum foreground fraction to accept a crop
+  mask_dropout:     0.10          # fraction of foreground pixels zeroed
+  workers:          4
+  class_names:      ["negative", "positive"]
+
+hpo:
+  n_workers:           4
+  trials_per_worker:   13        # total trials = n_workers × trials_per_worker
+  timeout_hours:       8
+
+noise_robustness:
+  gaussian_sigmas:      [10, 25, 50]
+  blur_kernels:         [3, 7, 15]
+  brightness_factors:   [0.6, 0.8, 1.4]

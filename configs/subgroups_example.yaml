@@ -1,0 +1,54 @@
+# ── Subgroup Analysis Configuration ───────────────────────────────────────────
+# Define analysis subgroups for subgroup_metrics.py.
+# Each subgroup is defined by a list of slide_id values (or prefixes).
+# The script will filter tile_predictions.csv to each group and compute
+# full metrics independently.
+#
+# Usage:
+#   python src/evaluation/subgroup_metrics.py \
+#       --preds       outputs/results/tile_predictions.csv \
+#       --groups_yaml configs/subgroups_example.yaml \
+#       --out_dir     outputs/results/subgroups
+
+subgroups:
+  # Example: sex-stratified analysis
+  # Replace slide_ids with your actual slide identifiers
+
+  male_athletes:
+    description: "Male athlete cohort — all timepoints"
+    slide_ids:
+      - "subject03_tp4a"
+      - "subject03_tp4b"
+      - "subject04_tp4a"
+      # ... add all male slide IDs
+
+  female_athletes:
+    description: "Female athlete cohort — all timepoints"
+    slide_ids:
+      - "subject01_tp4a"
+      - "subject01_tp4b"
+      - "subject13_tp4a"
+      # ... add all female slide IDs
+
+  # Example: timepoint-stratified analysis
+  control_timepoints:
+    description: "Pre-treatment timepoints only (ctrl label)"
+    slide_ids:
+      - "subject01_tp4a"
+      - "subject01_tp5a"
+      # ... all TP4/TP5 slides
+
+  epo_timepoints:
+    description: "During/post-treatment timepoints (rEPO label)"
+    slide_ids:
+      - "subject15_tp7a"
+      - "subject15_tp8a"
+      # ... all TP7-10 slides
+
+# Alternatively, define groups by slide_id prefix matching:
+# The script also supports prefix-based matching if slide_id_prefixes
+# is provided instead of slide_ids.
+#
+# male_athletes:
+#   description: "Male athletes — prefix match"
+#   slide_id_prefixes: ["03p", "04p", "05p"]
